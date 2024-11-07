@@ -1042,6 +1042,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
                 C2fPSA,
                 C2fCIB,
                 C2PSA,
+                CBAM
             }:
                 args.insert(2, n)  # number of repeats
                 n = 1
