@@ -11,7 +11,19 @@ import torch
 import torch.nn as nn
 
 from ultralytics.nn.modules import (
-    CBAM
+    CBAM,
+    ChannelAttention,
+    Concat,
+    Conv,
+    Conv2,
+    ConvTranspose,
+    DWConv,
+    DWConvTranspose2d,
+    Focus,
+    GhostConv,
+    LightConv,
+    RepConv,
+    SpatialAttention,
 )
 
 from ultralytics.nn.modules import (
