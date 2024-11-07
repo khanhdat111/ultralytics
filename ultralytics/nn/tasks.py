@@ -1076,6 +1076,15 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             args = [c1, c2, *args[1:]]
         elif m is CBFuse:
             c2 = ch[f[-1]]
+        elif m is CBAM:
+            c1 = ch[f]
+            if len(args) == 0:
+                args = [c1]
+            elif len(args) == 1:
+                args = [c1, args[0]]
+            else:
+                raise ValueError(f"CBAM expected at most 1 argument (kernel_size), got {len(args)}")
+            c2 = c1  # CBAM không thay đổi số kênh
         else:
             c2 = ch[f]
 
