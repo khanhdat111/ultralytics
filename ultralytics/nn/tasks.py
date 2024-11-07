@@ -11,6 +11,10 @@ import torch
 import torch.nn as nn
 
 from ultralytics.nn.modules import (
+    CBAM
+)
+
+from ultralytics.nn.modules import (
     AIFI,
     C1,
     C2,
