@@ -379,21 +379,31 @@ class Concat(nn.Module):
         """Forward pass for the YOLOv8 mask Proto module."""
         return torch.cat(x, self.d)
 
-class Addition(nn.Module):
-    """Module to add a scalar or element-wise add two tensors."""
 
-    def __init__(self):
-        """Initialize Addition module.
+class Addition(nn.Module):
+    """Module để cộng một số vô hướng hoặc cộng hai tensor theo từng phần tử."""
+
+    def __init__(self, alpha=None):
+        """
+        Khởi tạo mô-đun Addition.
         Args:
-            alpha (float): A scalar to add to the input tensor.
+            alpha (float, optional): Một số vô hướng để cộng vào tensor đầu vào nếu không có tensor thứ hai.
         """
         super().__init__()
-    def forward(self, x):
-        """Forward pass to add alpha or another tensor to x.
-        Args:
-            x (Tensor): Input tensor.
-            y (Tensor, optional): Another tensor to add to x. If None, alpha will be added to x.
-        Returns:
-            Tensor: Resulting tensor after addition.
+        self.alpha = alpha
+
+    def forward(self, x, y=None):
         """
-        return torch.add(x)
+        Thực thi phép cộng để thêm một số vô hướng hoặc tensor khác vào x.
+        Args:
+            x (Tensor): Tensor đầu vào.
+            y (Tensor, optional): Tensor khác để cộng vào x. Nếu không có, alpha sẽ được cộng vào x.
+        Returns:
+            Tensor: Tensor kết quả sau phép cộng.
+        """
+        if y is not None:
+            return x + y
+        elif self.alpha is not None:
+            return x + self.alpha
+        else:
+            raise ValueError("Phải cung cấp tensor thứ hai hoặc số vô hướng alpha để thực hiện phép cộng.")
