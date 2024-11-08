@@ -382,12 +382,12 @@ class Concat(nn.Module):
 class Addition(nn.Module):
     """Concatenate a list of tensors along dimension."""
 
-    def __init__(self, dimension=1):
+    def __init__(self, alpha=1):
         """Addition a list of tensors along a specified dimension."""
         super().__init__()
-        self.d = dimension
+        self.a = alpha
 
     def forward(self, x):
         """Forward pass for the YOLOv8 mask Proto module."""
-        return torch.add(x, self.d)
+        return torch.add(x, self.a)
 
