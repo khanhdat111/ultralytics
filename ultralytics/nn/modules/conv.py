@@ -380,14 +380,26 @@ class Concat(nn.Module):
         return torch.cat(x, self.d)
 
 class Addition(nn.Module):
-    """Concatenate a list of tensors along dimension."""
+    """Module to add a scalar or element-wise add two tensors."""
 
     def __init__(self, alpha=1):
-        """Addition a list of tensors along a specified dimension."""
+        """Initialize Addition module.
+        Args:
+            alpha (float): A scalar to add to the input tensor.
+        """
         super().__init__()
-        self.a = alpha
+        self.alpha = alpha
 
-    def forward(self, x):
-        """Forward pass for the YOLOv8 mask Proto module."""
-        return torch.add(x, self.a)
+    def forward(self, x, y=None):
+        """Forward pass to add alpha or another tensor to x.
+        Args:
+            x (Tensor): Input tensor.
+            y (Tensor, optional): Another tensor to add to x. If None, alpha will be added to x.
+        Returns:
+            Tensor: Resulting tensor after addition.
+        """
+        if y is not None:
+            return x + y
+        else:
+            return x + self.alpha
 
