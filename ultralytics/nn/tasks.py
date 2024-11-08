@@ -24,6 +24,7 @@ from ultralytics.nn.modules import (
     LightConv,
     RepConv,
     SpatialAttention,
+    Addition
 )
 
 from ultralytics.nn.modules import (
