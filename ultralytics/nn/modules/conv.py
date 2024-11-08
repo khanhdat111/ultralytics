@@ -318,9 +318,9 @@ class RepConv(nn.Module):
 #         """Applies the forward pass through C1 module."""
 #         return self.spatial_attention(self.channel_attention(x))
 
-class SAM(nn.Module):
+class SpatialAttention(nn.Module):
     def __init__(self, bias=False):
-        super(SAM, self).__init__()
+        super(SpatialAttention, self).__init__()
         self.bias = bias
         self.conv = nn.Conv2d(in_channels=2, out_channels=1, kernel_size=7, stride=1, padding=3, dilation=1, bias=self.bias)
 
@@ -332,9 +332,9 @@ class SAM(nn.Module):
         output = F.sigmoid(output) * x 
         return output 
 
-class CAM(nn.Module):
+class ChannelAttention(nn.Module):
     def __init__(self, channels, r):
-        super(CAM, self).__init__()
+        super(ChannelAttention, self).__init__()
         self.channels = channels
         self.r = r
         self.linear = nn.Sequential(
@@ -357,8 +357,8 @@ class CBAM(nn.Module):
         super(CBAM, self).__init__()
         self.channels = channels
         self.r = r
-        self.sam = SAM(bias=False)
-        self.cam = CAM(channels=self.channels, r=self.r)
+        self.sam = SpatialAttention(bias=False)
+        self.cam = ChannelAttention(channels=self.channels, r=self.r)
 
     def forward(self, x):
         output = self.cam(x)
