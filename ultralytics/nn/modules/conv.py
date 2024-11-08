@@ -388,7 +388,7 @@ class Addition(nn.Module):
             alpha (float): A scalar to add to the input tensor.
         """
         super().__init__()
-    def forward(self, x, y):
+    def forward(self, x):
         """Forward pass to add alpha or another tensor to x.
         Args:
             x (Tensor): Input tensor.
@@ -396,4 +396,4 @@ class Addition(nn.Module):
         Returns:
             Tensor: Resulting tensor after addition.
         """
-        return x + y
+        return torch.add(x)
