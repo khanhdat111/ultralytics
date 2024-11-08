@@ -390,7 +390,7 @@ class Addition(nn.Module):
         super().__init__()
         self.alpha = alpha
 
-    def forward(self, x, y=None):
+    def forward(self, x, y):
         """Forward pass to add alpha or another tensor to x.
         Args:
             x (Tensor): Input tensor.
@@ -398,8 +398,4 @@ class Addition(nn.Module):
         Returns:
             Tensor: Resulting tensor after addition.
         """
-        if y is not None:
-            return x + y
-        else:
-            return x + self.alpha
-
+        return x + y
