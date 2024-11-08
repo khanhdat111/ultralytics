@@ -50,4 +50,4 @@ head:
 
   - [-1, 1, CBAM, [1024]] #Out_with_CBAM #23
 
-  - [[17, 20, 23], 1, Detect, [nc]] # Detect(P3, P4, P5)
+  - [[17, 21, 25], 1, Detect, [nc]] # Detect(P3, P4, P5)
