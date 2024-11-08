@@ -1064,6 +1064,8 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
         elif m is Addition:
+            if len(f) != 2:
+                raise ValueError("Addition module requires exactly two input tensors.")
             args = [ch[x] for x in f]
             c2 = ch[f[0]]
         elif m in {Detect, WorldDetect, Segment, Pose, OBB, ImagePoolingAttn, v10Detect}:
