@@ -382,14 +382,12 @@ class Concat(nn.Module):
 class Addition(nn.Module):
     """Module to add a scalar or element-wise add two tensors."""
 
-    def __init__(self, alpha=1):
+    def __init__(self):
         """Initialize Addition module.
         Args:
             alpha (float): A scalar to add to the input tensor.
         """
         super().__init__()
-        self.alpha = alpha
-
     def forward(self, x, y):
         """Forward pass to add alpha or another tensor to x.
         Args:
