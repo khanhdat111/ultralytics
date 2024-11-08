@@ -24,8 +24,6 @@ __all__ = (
     "Addition"
 )
 
-torch.use_deterministic_algorithms(False)
-
 def autopad(k, p=None, d=1):  # kernel, padding, dilation
     """Pad to 'same' shape outputs."""
     if d > 1:
