@@ -343,7 +343,7 @@ class Bottleneck(nn.Module):
 
     def forward(self, x):
         """Applies the YOLO FPN to input data."""
-        return cbam(x + self.cv2(self.cv1(x))) if self.add else cbam(self.cv2(self.cv1(x)))
+        return self.cbam(x + self.cv2(self.cv1(x))) if self.add else self.cbam(self.cv2(self.cv1(x)))
 
 
 class BottleneckCSP(nn.Module):
