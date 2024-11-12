@@ -279,10 +279,10 @@ class C2f(nn.Module):
         y = list(self.cv1(x).chunk(2, 1))
         y.extend(m(y[-1]) for m in self.m)
         y = self.cv2(torch.cat(y, 1)) 
+        print(f"Y: {y.size()}")
         if self.use_cbam:
             output = self.cbam(y)
         print(f"Output: {output.size()}")
-        print(f"Y: {y.size()}")
         return output
 
     def forward_split(self, x):
