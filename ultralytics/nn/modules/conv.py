@@ -275,98 +275,99 @@ class RepConv(nn.Module):
             self.__delattr__("id_tensor")
 
 
-# class ChannelAttention(nn.Module):
-#     """Channel-attention module https://github.com/open-mmlab/mmdetection/tree/v3.0.0rc1/configs/rtmdet."""
+class ChannelAttention(nn.Module):
+    """Channel-attention module https://github.com/open-mmlab/mmdetection/tree/v3.0.0rc1/configs/rtmdet."""
 
-#     def __init__(self, channels: int) -> None:
-#         """Initializes the class and sets the basic configurations and instance variables required."""
-#         super().__init__()
-#         self.pool = nn.AdaptiveAvgPool2d(1)
-#         self.fc = nn.Conv2d(channels, channels, 1, 1, 0, bias=True)
-#         self.act = nn.Sigmoid()
+    def __init__(self, channels: int) -> None:
+        """Initializes the class and sets the basic configurations and instance variables required."""
+        super().__init__()
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.fc = nn.Conv2d(channels, channels, 1, 1, 0, bias=True)
+        self.act = nn.Sigmoid()
 
-#     def forward(self, x: torch.Tensor) -> torch.Tensor:
-#         """Applies forward pass using activation on convolutions of the input, optionally using batch normalization."""
-#         return x * self.act(self.fc(self.pool(x)))
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Applies forward pass using activation on convolutions of the input, optionally using batch normalization."""
+        return x * self.act(self.fc(self.pool(x)))
 
-
-# class SpatialAttention(nn.Module):
-#     """Spatial-attention module."""
-
-#     def __init__(self, kernel_size=7):
-#         """Initialize Spatial-attention module with kernel size argument."""
-#         super().__init__()
-#         assert kernel_size in {3, 7}, "kernel size must be 3 or 7"
-#         padding = 3 if kernel_size == 7 else 1
-#         self.cv1 = nn.Conv2d(2, 1, kernel_size, padding=padding, bias=False)
-#         self.act = nn.Sigmoid()
-
-#     def forward(self, x):
-#         """Apply channel and spatial attention on input for feature recalibration."""
-#         return x * self.act(self.cv1(torch.cat([torch.mean(x, 1, keepdim=True), torch.max(x, 1, keepdim=True)[0]], 1)))
-
-
-# class CBAM(nn.Module):
-#     """Convolutional Block Attention Module."""
-
-#     def __init__(self, c1, kernel_size=7):
-#         """Initialize CBAM with given input channel (c1) and kernel size."""
-#         super().__init__()
-#         self.channel_attention = ChannelAttention(c1)
-#         self.spatial_attention = SpatialAttention(kernel_size)
-
-#     def forward(self, x):
-#         """Applies the forward pass through C1 module."""
-#         return self.spatial_attention(self.channel_attention(x))
 
 class SpatialAttention(nn.Module):
-    def __init__(self, bias=False):
-        super(SpatialAttention, self).__init__()
-        self.bias = bias
-        self.conv = nn.Conv2d(in_channels=2, out_channels=1, kernel_size=7, stride=1, padding=3, dilation=1, bias=self.bias)
+    """Spatial-attention module."""
+
+    def __init__(self, kernel_size=7):
+        """Initialize Spatial-attention module with kernel size argument."""
+        super().__init__()
+        assert kernel_size in {3, 7}, "kernel size must be 3 or 7"
+        padding = 3 if kernel_size == 7 else 1
+        self.cv1 = nn.Conv2d(2, 1, kernel_size, padding=padding, bias=False)
+        self.act = nn.Sigmoid()
 
     def forward(self, x):
-        max = torch.max(x,1)[0].unsqueeze(1)
-        avg = torch.mean(x,1).unsqueeze(1)
-        concat = torch.cat((max,avg), dim=1)
-        output = self.conv(concat)
-        output = F.sigmoid(output) * x 
-        return output 
+        """Apply channel and spatial attention on input for feature recalibration."""
+        return x * self.act(self.cv1(torch.cat([torch.mean(x, 1, keepdim=True), torch.max(x, 1, keepdim=True)[0]], 1)))
 
-class ChannelAttention(nn.Module):
-    def __init__(self, channels, r):
-        super(ChannelAttention, self).__init__()
-        self.channels = channels
-        self.r = r
-        self.linear = nn.Sequential(
-            nn.Linear(in_features=self.channels, out_features=self.channels//self.r, bias=True),
-            nn.ReLU(inplace=True),
-            nn.Linear(in_features=self.channels//self.r, out_features=self.channels, bias=True))
 
-    def forward(self, x):
-        max = F.adaptive_max_pool2d(x, output_size=1)
-        avg = F.adaptive_avg_pool2d(x, output_size=1)
-        b, c, _, _ = x.size()
-        linear_max = self.linear(max.view(b,c)).view(b, c, 1, 1)
-        linear_avg = self.linear(avg.view(b,c)).view(b, c, 1, 1)
-        output = linear_max + linear_avg
-        output = F.sigmoid(output) * x
-        return output
-    
 class CBAM(nn.Module):
-    def __init__(self, channels, r):
-        super(CBAM, self).__init__()
-        self.channels = channels
-        self.r = r
-        self.sam = SpatialAttention(bias=False)
-        self.cam = ChannelAttention(channels=self.channels, r=self.r)
+    """Convolutional Block Attention Module."""
+
+    def __init__(self, c1, kernel_size=7):
+        """Initialize CBAM with given input channel (c1) and kernel size."""
+        super().__init__()
+        self.channel_attention = ChannelAttention(c1)
+        self.spatial_attention = SpatialAttention(kernel_size)
 
     def forward(self, x):
-        output = self.cam(x)
-        output = self.sam(output)
-        print(output.size())
-        print(x.size())
+        """Applies the forward pass through C1 module."""
+        output = self.spatial_attention(self.channel_attention(x))
         return output + x
+
+# class SpatialAttention(nn.Module):
+#     def __init__(self, bias=False):
+#         super(SpatialAttention, self).__init__()
+#         self.bias = bias
+#         self.conv = nn.Conv2d(in_channels=2, out_channels=1, kernel_size=7, stride=1, padding=3, dilation=1, bias=self.bias)
+
+#     def forward(self, x):
+#         max = torch.max(x,1)[0].unsqueeze(1)
+#         avg = torch.mean(x,1).unsqueeze(1)
+#         concat = torch.cat((max,avg), dim=1)
+#         output = self.conv(concat)
+#         output = F.sigmoid(output) * x 
+#         return output 
+
+# class ChannelAttention(nn.Module):
+#     def __init__(self, channels, r):
+#         super(ChannelAttention, self).__init__()
+#         self.channels = channels
+#         self.r = r
+#         self.linear = nn.Sequential(
+#             nn.Linear(in_features=self.channels, out_features=self.channels//self.r, bias=True),
+#             nn.ReLU(inplace=True),
+#             nn.Linear(in_features=self.channels//self.r, out_features=self.channels, bias=True))
+
+#     def forward(self, x):
+#         max = F.adaptive_max_pool2d(x, output_size=1)
+#         avg = F.adaptive_avg_pool2d(x, output_size=1)
+#         b, c, _, _ = x.size()
+#         linear_max = self.linear(max.view(b,c)).view(b, c, 1, 1)
+#         linear_avg = self.linear(avg.view(b,c)).view(b, c, 1, 1)
+#         output = linear_max + linear_avg
+#         output = F.sigmoid(output) * x
+#         return output
+    
+# class CBAM(nn.Module):
+#     def __init__(self, channels, r):
+#         super(CBAM, self).__init__()
+#         self.channels = channels
+#         self.r = r
+#         self.sam = SpatialAttention(bias=False)
+#         self.cam = ChannelAttention(channels=self.channels, r=self.r)
+
+#     def forward(self, x):
+#         output = self.cam(x)
+#         output = self.sam(output)
+#         print(output.size())
+#         print(x.size())
+#         return output + x
 
 
 class Concat(nn.Module):
