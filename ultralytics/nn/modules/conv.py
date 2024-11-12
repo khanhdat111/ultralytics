@@ -318,7 +318,7 @@ class CBAM(nn.Module):
     def forward(self, x):
         """Applies the forward pass through C1 module."""
         output = self.spatial_attention(self.channel_attention(x))
-        return output
+        return output + x
 
 # class SpatialAttention(nn.Module):
 #     def __init__(self, bias=False):
