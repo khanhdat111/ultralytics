@@ -364,6 +364,8 @@ class CBAM(nn.Module):
     def forward(self, x):
         output = self.cam(x)
         output = self.sam(output)
+        print(output.size())
+        print(x.size())
         return output + x
 
 
