@@ -7,7 +7,7 @@ import torch.nn.functional as F
 
 from ultralytics.utils.torch_utils import fuse_conv_and_bn
 
-from .conv import Conv, DWConv, GhostConv, LightConv, RepConv, autopad
+from .conv import Conv, DWConv, GhostConv, LightConv, RepConv, autopad, CBAM
 from .transformer import TransformerBlock
 
 __all__ = (
@@ -328,7 +328,7 @@ class GhostBottleneck(nn.Module):
         """Applies skip connection and concatenation to input tensor."""
         return self.conv(x) + self.shortcut(x)
 
-
+#Modify below by attaching CBAM block
 class Bottleneck(nn.Module):
     """Standard bottleneck."""
 
@@ -339,10 +339,11 @@ class Bottleneck(nn.Module):
         self.cv1 = Conv(c1, c_, k[0], 1)
         self.cv2 = Conv(c_, c2, k[1], 1, g=g)
         self.add = shortcut and c1 == c2
+        self.cbam = CBAM(c1, r=8)
 
     def forward(self, x):
         """Applies the YOLO FPN to input data."""
-        return x + self.cv2(self.cv1(x)) if self.add else self.cv2(self.cv1(x))
+        return cbam(x + self.cv2(self.cv1(x))) if self.add else cbam(self.cv2(self.cv1(x)))
 
 
 class BottleneckCSP(nn.Module):
