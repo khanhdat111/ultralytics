@@ -332,19 +332,25 @@ class GhostBottleneck(nn.Module):
 class Bottleneck(nn.Module):
     """Standard bottleneck."""
 
-    def __init__(self, c1, c2, shortcut=True, g=1, k=(3, 3), e=0.5):
+    def __init__(self, c1, c2, shortcut=True, g=1, k=(3, 3), e=0.5, cbam=True):
         """Initializes a standard bottleneck module with optional shortcut connection and configurable parameters."""
         super().__init__()
         c_ = int(c2 * e)  # hidden channels
         self.cv1 = Conv(c1, c_, k[0], 1)
         self.cv2 = Conv(c_, c2, k[1], 1, g=g)
         self.add = shortcut and c1 == c2
-        self.cbam = CBAM(c1, r=8)
+        if self.use_cbam == cbam:
+            self.cbam = CBAM(c1, r=16)
 
     def forward(self, x):
         """Applies the YOLO FPN to input data."""
-        return self.cbam(x + self.cv2(self.cv1(x))) if self.add else self.cbam(self.cv2(self.cv1(x)))
-
+        # return self.cbam(x + self.cv2(self.cv1(x))) if self.add else self.cbam(self.cv2(self.cv1(x)))
+        out = self.cv2(self.cv1(x))
+        if self.add:
+            out = x + out
+        if self.use_cbam:
+            out = self.cbam(out)
+        return out
 
 class BottleneckCSP(nn.Module):
     """CSP Bottleneck https://github.com/WongKinYiu/CrossStagePartialNetworks."""
