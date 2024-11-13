@@ -1047,9 +1047,9 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
                 n = 1
             if m is C3k2:  # for M/L/X sizes
                 legacy = False
-                print(*args)
                 if scale in "mlx":
                     args[3] = True
+                print(*args)
         elif m is AIFI:
             args = [ch[f], *args]
         elif m in {HGStem, HGBlock}:
