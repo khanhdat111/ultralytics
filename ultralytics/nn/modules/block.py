@@ -314,11 +314,11 @@ class C3(nn.Module):
 
     def forward(self, x):
         """Forward pass through the CSP bottleneck with 2 convolutions."""
-        output = self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1))
+        y = self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1))
         if self.use_cbam:
-            otuput = self.cbam(output)
+            otuput = self.cbam(y)
         else:
-            output = otuput
+            output = y
         return output
 
 class C3x(C3):
