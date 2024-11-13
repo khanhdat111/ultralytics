@@ -272,17 +272,17 @@ class C2f(nn.Module):
         self.m = nn.ModuleList(Bottleneck(self.c, self.c, shortcut, g, k=((3, 3), (3, 3)), e=1.0) for _ in range(n))
         self.use_cbam = cbam
         if self.use_cbam:
-            self.cbam = CBAM(c1)
+            self.cbam = CBAM(c2)
 
     def forward(self, x):
         """Forward pass through C2f layer."""
         y = list(self.cv1(x).chunk(2, 1))
         y.extend(m(y[-1]) for m in self.m)
         y = self.cv2(torch.cat(y, 1)) 
-        print(f"Y: {y.size()}")
+        # print(f"Y: {y.size()}")
         if self.use_cbam:
             output = self.cbam(y)
-        print(f"Output: {output.size()}")
+        # print(f"Output: {output.size()}")
         return output
 
     def forward_split(self, x):
@@ -305,12 +305,14 @@ class C3(nn.Module):
         self.m = nn.Sequential(*(Bottleneck(c_, c_, shortcut, g, k=((1, 1), (3, 3)), e=1.0) for _ in range(n)))
         self.use_cbam = cbam
         if self.use_cbam:
-            self.cbam = CBAM(c1)
+            self.cbam = CBAM(c2)
 
     def forward(self, x):
         """Forward pass through the CSP bottleneck with 2 convolutions."""
-        return self.cbam(self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1))) if self.use_cbam else self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1))
-
+        output = self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1))
+        if self.use_cbam:
+            otuput = self.cbam(output)
+        return output
 
 class C3x(C3):
     """C3 module with cross-convolutions."""
