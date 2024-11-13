@@ -285,6 +285,8 @@ class C2f(nn.Module):
         # print(f"Y: {y.size()}")
         if self.use_cbam:
             output = self.cbam(y)
+        else:
+            output = y
         # print(f"Output: {output.size()}")
         return output
 
@@ -315,6 +317,8 @@ class C3(nn.Module):
         output = self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1))
         if self.use_cbam:
             otuput = self.cbam(output)
+        else:
+            output = otuput
         return output
 
 class C3x(C3):
