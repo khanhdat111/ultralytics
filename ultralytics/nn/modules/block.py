@@ -272,7 +272,7 @@ class C2f(nn.Module):
         self.m = nn.ModuleList(Bottleneck(self.c, self.c, shortcut, g, k=((3, 3), (3, 3)), e=1.0) for _ in range(n))
         self.use_cbam = cbam
         if self.use_cbam:
-            self.cbam = CBAM(c2)
+            self.cbam = CBAM(c2, reduction= 16)
 
     def forward(self, x):
         """Forward pass through C2f layer."""
@@ -307,7 +307,7 @@ class C3(nn.Module):
         self.m = nn.Sequential(*(Bottleneck(c_, c_, shortcut, g, k=((1, 1), (3, 3)), e=1.0) for _ in range(n)))
         self.use_cbam = cbam
         if self.use_cbam:
-            self.cbam = CBAM(c2)
+            self.cbam = CBAM(c2, reduction= 16)
 
     def forward(self, x):
         """Forward pass through the CSP bottleneck with 2 convolutions."""
