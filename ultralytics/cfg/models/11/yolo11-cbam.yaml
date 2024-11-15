@@ -34,20 +34,20 @@ head:
   - [[-1, -2], 1, Concat, [1]]
   - [-1, 2, C3k2, [512, False, 0.5, 1, True, True]]
     
-  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] #1
   - [[-1, 8], 1, Concat, [1]] # cat backbone P4
   - [-1, 2, C3k2, [512, False, 0.5, 1, True, True]] # 13
 
-  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] #2
   - [[-1, 4], 1, Concat, [1]] # cat backbone P3
   # - [-1, 2, C3k2, [256, False, 0.5, 1, True, True]] # 16 (P2/8-small)
 
-  - [-1, 1, nn.Upsample, [None, 2, "nearest"]]
+  - [-1, 1, nn.Upsample, [None, 2, "nearest"]] #3
   - [[-1, 2], 1, Concat, [1]]
   
   - [-1, 2, C3k2, [128, False, 0.5, 1, True, True]] # 24 (P2/4-s-small) #160x160x128
   - [-1, 1, Conv, [256, 3, 1]]
-  - [-1, 2, C3k2, [256, False, 0.5, 1, True, True]]
+  - [21, 2, C3k2, [256, False, 0.5, 1, True, True]]
 
   - [[-2, -1], 1, Concat, [1]]
   - [-1, 2, C3k2, [256, False, 0.5, 1, True, True]] # 28 (P3/8-small) #80x80x256
