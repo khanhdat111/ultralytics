@@ -277,13 +277,11 @@ class C2f(nn.Module):
     def forward(self, x):
         """Forward pass through C2f layer."""
         y = list(self.cv1(x).chunk(2, 1))
-        y.extend(m(y[-1]) for m in self.m)
-        y = self.cv2(torch.cat(y, 1)) 
-        # print(f"Y: {y.size()}")
         if self.use_cbam:
-            output = self.cbam(y)
-        else:
-            output = y
+            y = self.cbam(y)
+        y.extend(m(y[-1]) for m in self.m)
+        output = self.cv2(torch.cat(y, 1)) 
+        # print(f"Y: {y.size()}")
         # print(f"Output: {output.size()}")
         return output
 
@@ -311,11 +309,10 @@ class C3(nn.Module):
 
     def forward(self, x):
         """Forward pass through the CSP bottleneck with 2 convolutions."""
-        y = self.cv3(torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1))
+        y = torch.cat((self.m(self.cv1(x)), self.cv2(x)), 1)
         if self.use_cbam:
-            output = self.cbam(y)
-        else:
-            output = y
+            y = self.cbam(y)
+        output = self.cv3(y)
         return output
 
 class C3x(C3):
