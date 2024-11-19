@@ -28,7 +28,7 @@ backbone:
   - [-1, 2, C2PSA, [1024]] # 10
 
 #Model 2 ------------------------------------------
-  - [-1, 1, ResNetLayer, [3, 64, 1, True, 1]] # 0
+  - [0, 1, ResNetLayer, [3, 64, 1, True, 1]] # 0
   - [-1, 1, ResNetLayer, [64, 64, 1, False, 3]] # 1
   - [-1, 1, ResNetLayer, [256, 128, 2, False, 4]] # 2
   - [-1, 1, ResNetLayer, [512, 256, 2, False, 6]] # 3
