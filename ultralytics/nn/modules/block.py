@@ -56,6 +56,7 @@ class Input(nn.Module):
         super().__init__()
 
     def forward(self, x):
+        print(f"X size: {x.size()}")
         return x
 
 class DFL(nn.Module):
