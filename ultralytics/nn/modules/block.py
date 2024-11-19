@@ -49,7 +49,14 @@ __all__ = (
     "Attention",
     "PSA",
     "SCDown",
+    "Input",
 )
+class Input(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+    def forward(self, x):
+        return x
 
 class DFL(nn.Module):
     """
