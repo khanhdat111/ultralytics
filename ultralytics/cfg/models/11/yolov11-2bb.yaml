@@ -36,6 +36,7 @@ backbone:
 
 #Fusion backbone ----------------------------------
   - [[9, 14], 1, Concat, [1]]
+  - [-1, 1, Conv, [1024, 3, 1]]
   - [-1, 1, SPPF, [1024, 5]] # 9
   - [-1, 2, C2PSA, [1024]] # 10
   
@@ -52,13 +53,13 @@ head:
   - [-1, 1, CBAM, [256, 16]]
 
   - [-2, 1, Conv, [256, 3, 2]]
-  - [[-1, 20], 1, Concat, [1]] # cat head P4
+  - [[-1, 21], 1, Concat, [1]] # cat head P4
   - [-1, 2, C3k2, [512, False, 0.5, 1, True, False]] # 19 (P4/16-medium)
   - [-1, 1, CBAM, [512, 16]]
 
   - [-2, 1, Conv, [512, 3, 2]]
-  - [[-1, 17], 1, Concat, [1]] # cat head P5
+  - [[-1, 18], 1, Concat, [1]] # cat head P5
   - [-1, 2, C3k2, [1024, True, 0.5, 1, True, False]] # 22 (P5/32-large)
   - [-1, 1, CBAM, [1024, 16]]
 
-  - [[24, 28, 32], 1, Detect, [nc]] # Detect(P3, P4, P5)
+  - [[25, 29, 33], 1, Detect, [nc]] # Detect(P3, P4, P5)
