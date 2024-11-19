@@ -77,11 +77,11 @@ head:
   - [[25, 43], 1, Concat, [1]]
   - [[28, 46], 1, Concat, [1]]
 
-  - [47, 2, C3k2, [256, False]]
+  - [47, 2, C3k2, [256, False, 0.5, 1, True, False]]
   - [-1, 1, CBAM, [256, 16]]
-  - [48, 2, C3k2, [512, False]]
+  - [48, 2, C3k2, [512, False, 0.5, 1, True, False]]
   - [-1, 1, CBAM, [512, 16]]
-  - [49, 2, C3k2, [1024, False]]
+  - [49, 2, C3k2, [1024, False, 0.5, 1, True, False]]
   - [-1, 1, CBAM, [1024, 16]]
 
   - [[51, 53, 55], 1, Detect, [nc]] # Detect(P3, P4, P5)
