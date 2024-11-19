@@ -78,6 +78,7 @@ from ultralytics.nn.modules import (
     Segment,
     WorldDetect,
     v10Detect,
+    Input
 )
 from ultralytics.utils import DEFAULT_CFG_DICT, DEFAULT_CFG_KEYS, LOGGER, colorstr, emojis, yaml_load
 from ultralytics.utils.checks import check_requirements, check_suffix, check_yaml
@@ -1063,10 +1064,13 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             args = [ch[f]]
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
+        elif m is Input:
+            c2 = ch[f]
+            args = []
         # elif m is Addition:
         #     if len(f) != 2:
         #         raise ValueError("Addition module requires exactly two input tensors.")
-        #     c2 = sum(ch[x] for x in f)
+        #     c2 = sum(ch[x] for x in f)     
         elif m in {Detect, WorldDetect, Segment, Pose, OBB, ImagePoolingAttn, v10Detect}:
             args.append([ch[x] for x in f])
             if m is Segment:
