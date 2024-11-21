@@ -22,7 +22,8 @@ __all__ = (
     "CBAM",
     "Concat",
     "RepConv",
-    "Addition"
+    "Addition",
+    "ResBlock_CBAM"
 )
 
 def autopad(k, p=None, d=1):  # kernel, padding, dilation
