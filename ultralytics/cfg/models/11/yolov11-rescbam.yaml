@@ -43,7 +43,7 @@ head:
   - [-1, 1, ResBlock_CBAM, [128]]
 
   - [-1, 1, Conv, [128, 3, 2]]
-  - [[-1, 16], 1, Concat, [1]] # cat head P4
+  - [[-1, 17], 1, Concat, [1]] # cat head P4
   - [-1, 2, C3k2, [256, False, 0.5, 1, True, False]] # 25 (P4/16-small)
   - [-1, 1, ResBlock_CBAM, [256]]
 
@@ -57,4 +57,4 @@ head:
   - [-1, 2, C3k2, [1024, True, 0.5, 1, True, False]] # 33 (P5/32-large)
   - [-1, 1, ResBlock_CBAM, [1024]]
 
-  - [[21, 25, 29, 33], 1, Detect, [nc]] # Detect(P3, P4, P5)
+  - [[22, 26, 30, 34], 1, Detect, [nc]] # Detect(P3, P4, P5)
