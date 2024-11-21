@@ -43,9 +43,10 @@ class se_block(nn.Module):   #SEnet
         b, c, _, _ = x.size()
         # b,c,h,w -> b,c,1,1,
         y = self.avg_pool(x).view(b, c)
-        print(f"Y size : {y.size()}")
+        print(f"Y size before: {y.size()}")
         print(f"X size : {x.size()}")
-        y = self.fc(y).view(b, c, 1, 1)
+        y = self.fc(y).view(b, c, 1, 1) 
+        print(f"Y size after: {y.size()}")
         return x * y
 
 def autopad(k, p=None, d=1):  # kernel, padding, dilation
