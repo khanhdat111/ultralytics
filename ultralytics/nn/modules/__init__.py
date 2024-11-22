@@ -75,7 +75,7 @@ from .conv import (
     Addition,
     ResBlock_CBAM,
     se_block,
-    ASFF
+    ASFF,
 )
 from .head import OBB, Classify, Detect, Pose, RTDETRDecoder, Segment, WorldDetect, v10Detect
 from .transformer import (
@@ -162,5 +162,7 @@ __all__ = (
     "Attention",
     "PSA",
     "Addition",
-    "ResBlock_CBAM"
+    "ResBlock_CBAM",
+    "se_block",
+    "ASFF"
 )
