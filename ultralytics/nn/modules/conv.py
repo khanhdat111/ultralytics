@@ -29,6 +29,29 @@ __all__ = (
 )
 
 
+def add_conv(in_ch, out_ch, ksize, stride, leaky=True):
+    """
+    Add a conv2d / batchnorm / leaky ReLU block.
+    Args:
+        in_ch (int): number of input channels of the convolution layer.
+        out_ch (int): number of output channels of the convolution layer.
+        ksize (int): kernel size of the convolution layer.
+        stride (int): stride of the convolution layer.
+    Returns:
+        stage (Sequential) : Sequential layers composing a convolution block.
+    """
+    stage = nn.Sequential()
+    pad = (ksize - 1) // 2
+    stage.add_module('conv', nn.Conv2d(in_channels=in_ch,
+                                       out_channels=out_ch, kernel_size=ksize, stride=stride,
+                                       padding=pad, bias=False))
+    stage.add_module('batch_norm', nn.BatchNorm2d(out_ch))
+    if leaky:
+        stage.add_module('leaky', nn.LeakyReLU(0.1))
+    else:
+        stage.add_module('relu6', nn.ReLU6(inplace=True))
+    return stage
+
 class ASFF(nn.Module):
     def __init__(self, level, rfb=False, vis=False):
         super(ASFF, self).__init__()
