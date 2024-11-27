@@ -30,9 +30,9 @@ backbone:
 
   - [0, 1, ResNetLayer, [3, 64, 1, True, 1]] # 12-P1/2
   - [-1, 1, ResNetLayer, [64, 64, 1, False, 3]] # 13-P2/4
-  - [-1, 1, ResNetLayer, [256, 128, 2, False, 4, 4]] # 14-P3/8
-  - [-1, 1, ResNetLayer, [512, 256, 2, False, 6, 2]] # 15-P4/16
-  - [-1, 1, ResNetLayer, [512, 256, 2, False, 3, 4]] # 16-P5/32
+  - [-1, 1, ResNetLayer, [256, 128, 2, False, 4]] # 14-P3/8
+  - [-1, 1, ResNetLayer, [512, 256, 2, False, 6]] # 15-P4/16
+  - [-1, 1, ResNetLayer, [1024, 512, 2, False, 3]] # 16-P5/32
 
   - [[5, 14], 1, Concat, [1]] #P3/8
   - [-1, 1, Conv, [512, 1, 1]]
