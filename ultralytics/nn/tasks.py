@@ -1102,7 +1102,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
         elif m is MHA:
             # c1, c2 = ch[f], args[0]
             #args = [args[0]]
-            c2 = ch[f]
+            c2 = ch[f[0]]
         else:
             c2 = ch[f]
 
