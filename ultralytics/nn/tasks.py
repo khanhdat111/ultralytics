@@ -24,7 +24,8 @@ from ultralytics.nn.modules import (
     LightConv,
     RepConv,
     SpatialAttention,
-    Addition
+    Addition,
+    MHA
 )
 
 from ultralytics.nn.modules import (
@@ -1098,6 +1099,10 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             if c2 != nc:
                 c2 = make_divisible(min(c2, max_channels) * width, 8)
             args = [c1, *args[1:]]
+        elif m is MHA:
+            # c1, c2 = ch[f], args[0]
+            #args = [args[0]]
+            c2 = ch[f]
         else:
             c2 = ch[f]
 
