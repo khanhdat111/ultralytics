@@ -25,7 +25,8 @@ __all__ = (
     "Addition",
     "ResBlock_CBAM",
     "se_block",
-    "ASFF"
+    "ASFF",
+    "MHA"
 )
 
 
@@ -116,6 +117,25 @@ class ASFF(nn.Module):
             return out, levels_weight, fused_out_reduced.sum(dim=1)
         else:
             return out
+
+
+class MHA(nn.Module):
+    def __init__(self, num_heads=8):
+        super(MHA, self).__init__()
+        self.num_heads = num_heads
+        self.dk = 1 / math.sqrt(num_heads)
+        self.softmax1 = nn.Softmax(dim=-1)
+        self.softmax2 = nn.Softmax(dim=-1)
+
+    def forward(self, inputs):
+        q, k, v = inputs
+        attn = torch.matmul(q, k.transpose(-2, -1)) * self.dk
+        attn = self.softmax1(attn)
+        x = torch.matmul(attn, v)
+        x = self.softmax2(x)
+        x = x * v  # Phép nhân từng phần tử
+        output = x + v  # Phép cộng từng phần tử
+        return output
 
 class se_block(nn.Module):   #SEnet
     def __init__(self, channel,  ratio=16):
