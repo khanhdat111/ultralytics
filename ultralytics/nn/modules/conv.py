@@ -129,6 +129,9 @@ class MHA(nn.Module):
 
     def forward(self, inputs):
         q, k, v = inputs
+        print(f"Q size: {q.size()}")
+        print(f"K size: {k.size()}")
+        print(f"V size: {v.size()}")
         attn = torch.matmul(q, k.transpose(-2, -1)) * self.dk
         attn = self.softmax1(attn)
         x = torch.matmul(attn, v)
