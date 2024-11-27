@@ -49,9 +49,9 @@ __all__ = (
     "Attention",
     "PSA",
     "SCDown",
-    "Input",
+    "Identity",
 )
-class Input(nn.Module):
+class Identity(nn.Module):
     def __init__(self):
         super().__init__()
 
