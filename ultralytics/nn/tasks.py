@@ -78,7 +78,7 @@ from ultralytics.nn.modules import (
     Segment,
     WorldDetect,
     v10Detect,
-    Input,
+    Identity,
     ResBlock_CBAM,
     se_block
 )
@@ -1067,7 +1067,7 @@ def parse_model(d, ch, verbose=True):  # model_dict, input_channels(3)
             args = [ch[f]]
         elif m is Concat:
             c2 = sum(ch[x] for x in f)
-        elif m is Input:
+        elif m is Identity:
             c2 = ch[f]
             args = []
         # elif m is Addition:
