@@ -56,7 +56,7 @@ from .block import (
     RepVGGDW,
     ResNetLayer,
     SCDown,
-    Input
+    Identity
 )
 from .conv import (
     CBAM,
@@ -164,5 +164,6 @@ __all__ = (
     "Addition",
     "ResBlock_CBAM",
     "se_block",
-    "ASFF"
+    "ASFF",
+    "Identity"
 )
